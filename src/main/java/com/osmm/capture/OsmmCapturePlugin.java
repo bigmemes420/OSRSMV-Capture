@@ -90,9 +90,9 @@ import org.slf4j.LoggerFactory;
  * names are written as codes, in game messages too (see PlayerNames and NameKey).
  */
 @PluginDescriptor(
-	name = "OSMM Capture",
+	name = "OSMM Recording",
 	description = "Records fights to a JSON-lines file for Old School Movie Maker",
-	tags = {"record", "capture", "developer"},
+	tags = {"record", "capture", "developer", "osmm"},
 	internalName = "osmm-capture"   // -> .runelite/plugin-data/osmm-capture (recordings in its recordings/)
 )
 public class OsmmCapturePlugin extends Plugin
@@ -204,7 +204,7 @@ public class OsmmCapturePlugin extends Plugin
 		overlayManager.add(overlay);
 		panel = new OsmmCapturePanel(this, new CaptureFiles(recordings, gson), io);
 		navButton = NavigationButton.builder()
-			.tooltip("OSMM capture")
+			.tooltip("OSMM Recording")
 			.icon(recordIcon())
 			.priority(10)
 			.panel(panel)
@@ -1585,7 +1585,7 @@ public class OsmmCapturePlugin extends Plugin
 	private void say(String text)
 	{
 		// CONSOLE, so onChatMessage (GAMEMESSAGE/SPAM only) doesn't record our own lines
-		client.addChatMessage(ChatMessageType.CONSOLE, "", "[OSMM capture] " + text, null);
+		client.addChatMessage(ChatMessageType.CONSOLE, "", "[OSMM Recording] " + text, null);
 	}
 
 	private static String ref(Actor a)

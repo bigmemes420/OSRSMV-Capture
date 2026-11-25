@@ -1,6 +1,6 @@
 # Capture format, version 1
 
-What the OSMM Capture plugin writes. One file per recording, named
+What the OSMM Recording plugin writes. One file per recording, named
 `capture_<yyyy-MM-dd_HH-mm-ss>.jsonl`, in `%USERPROFILE%\.runelite\plugin-data\osmm-capture\recordings\`, with its
 notes sidecar ([below](#notes-sidecar)) beside it. The key for player codes, `anonymise.key`, is one folder up, in
 `osmm-capture\` itself, so the recordings folder can be shared without it. (Earlier versions kept the recordings in
@@ -29,6 +29,9 @@ notes sidecar ([below](#notes-sidecar)) beside it. The key for player codes, `an
 - Missing or null: none.
 
 Indexes are reused after an actor leaves view. An `actor` record (re)defines a reference; a `gone` record ends it.
+An NPC's index is kept when it dies and respawns: the `actor` record after its `death` is its next life. An NPC's
+`actor` record with `npc` -1 describes an NPC already despawned (written by a late event after its `gone`) and
+describes nothing: readers ignore it.
 
 ## Grouping lines into server ticks
 

@@ -117,7 +117,7 @@ final class OsmmCapturePanel extends PluginPanel
 
 		setLayout(new GridBagLayout());
 		int y = 0;
-		JLabel title = new JLabel("OSMM capture");
+		JLabel title = new JLabel("OSMM Recording");
 		title.setFont(FontManager.getRunescapeBoldFont());
 		title.setForeground(WHITE);
 		add(title, row(y++, 0));

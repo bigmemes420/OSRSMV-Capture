@@ -1,4 +1,4 @@
-# OSMM capture
+# OSMM Recording
 
 A RuneLite plugin that records fights to a file, tick by tick: who animates with what, where everyone stands, gear
 and switches, projectiles, graphics, hitsplats and sounds. Old School Movie Maker imports these files to play the
