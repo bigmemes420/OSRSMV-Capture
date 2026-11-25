@@ -1,3 +1,7 @@
+// OSMM capture: a RuneLite plugin that records fights to JSON-lines files.
+// Run it with the `run` task (gradle run, or the Gradle panel in IntelliJ IDEA).
+// Laid out as RuneLite's example-plugin template, less Lombok (not used).
+
 plugins {
 	id 'java'
 }
@@ -14,27 +18,28 @@ repositories {
 }
 
 def runeLiteVersion = 'latest.release'
-def pluginMainClass = 'com.example.ExamplePluginTest'
+def pluginMainClass = 'com.osmm.capture.OsmmCapturePluginTest'
 
 dependencies {
 	compileOnly group: 'net.runelite', name:'client', version: runeLiteVersion
-
-	compileOnly 'org.projectlombok:lombok:1.18.30'
-	annotationProcessor 'org.projectlombok:lombok:1.18.30'
 
 	testImplementation 'junit:junit:4.12'
 	testImplementation group: 'net.runelite', name:'client', version: runeLiteVersion
 	testImplementation group: 'net.runelite', name:'jshell', version: runeLiteVersion
 }
 
-group = 'com.example'
+group = 'com.osmm'
+version = '1.0'
 
 tasks.withType(JavaCompile).configureEach {
 	options.encoding = 'UTF-8'
 	options.release.set(11)
 }
 
+// Starts RuneLite in developer mode with this plugin loaded.
 tasks.register('run', JavaExec) {
+	group = 'application'
+	description = 'Runs RuneLite (developer mode) with the OSMM capture plugin'
 	classpath = sourceSets.test.runtimeClasspath
 	mainClass = pluginMainClass
 
