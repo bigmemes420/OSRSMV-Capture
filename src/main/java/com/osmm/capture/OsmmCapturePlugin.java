@@ -93,7 +93,7 @@ import org.slf4j.LoggerFactory;
 	name = "OSMM Capture",
 	description = "Records fights to a JSON-lines file for Old School Movie Maker",
 	tags = {"record", "capture", "developer"},
-	internalName = "osmm-capture"   // -> .runelite/plugin-data/osmm-capture
+	internalName = "osmm-capture"   // -> .runelite/plugin-data/osmm-capture (recordings in its recordings/)
 )
 public class OsmmCapturePlugin extends Plugin
 {
@@ -154,7 +154,8 @@ public class OsmmCapturePlugin extends Plugin
 	private volatile Object nameKeyLoad;   // this startUp's load (one from an earlier run is ignored)
 	private volatile PendingStart pendingStart;
 
-	private Filepath dir;
+	private Filepath dir;          // the plugin's folder: the key (NameKey) is kept here
+	private Filepath recordings;   // its recordings folder (RecordingsFolder): the captures and their notes
 	private ExecutorService io;   // file work for the panel: off the EDT and the client thread
 	private volatile OsmmCapturePanel panel;
 	private NavigationButton navButton;
@@ -175,6 +176,7 @@ public class OsmmCapturePlugin extends Plugin
 	protected void startUp() throws IOException   // (on the EDT)
 	{
 		dir = getPluginDirectory();
+		recordings = RecordingsFolder.in(dir);
 		io = Executors.newSingleThreadExecutor(r ->
 		{
 			Thread t = new Thread(r, "osmm-capture-files");
@@ -191,6 +193,7 @@ public class OsmmCapturePlugin extends Plugin
 		{
 			requestNameKey();   // (first on the io thread, before the panel's first listing)
 		}
+		moveOldRecordings();   // (on the io thread too, also before the panel's first listing there)
 		status = Status.IDLE;
 		loginWatch = new LoginWatch();
 		combatWatch = new CombatWatch();
@@ -199,7 +202,7 @@ public class OsmmCapturePlugin extends Plugin
 		indicator = config.showIndicator();
 		clientClosing = false;
 		overlayManager.add(overlay);
-		panel = new OsmmCapturePanel(this, new CaptureFiles(dir, gson), io);
+		panel = new OsmmCapturePanel(this, new CaptureFiles(recordings, gson), io);
 		navButton = NavigationButton.builder()
 			.tooltip("OSMM capture")
 			.icon(recordIcon())
@@ -433,7 +436,8 @@ public class OsmmCapturePlugin extends Plugin
 		}
 		// (the writer makes the folder and opens the file on its own thread; a failure comes back to writerFailed)
 		fileName = "capture_" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss")) + ".jsonl";
-		CaptureWriter out = new CaptureWriter(dir, fileName, (w, ex) -> clientThread.invoke(() -> writerFailed(w, ex)));
+		CaptureWriter out = new CaptureWriter(recordings, fileName,
+			(w, ex) -> clientThread.invoke(() -> writerFailed(w, ex)));
 		writer = out;
 		this.label = label;
 		byCombat = combat;
@@ -496,6 +500,40 @@ public class OsmmCapturePlugin extends Plugin
 		{
 			this.label = label;
 			this.combat = combat;
+		}
+	}
+
+	// ---- the recordings folder ------------------------------------------------------------------------
+
+	/**
+	 * Moves recordings from the plugin's folder (where they used to be kept, beside the key) into the recordings
+	 * folder, on the io thread. Queued there before the panel's first listing, so the panel lists them where they now
+	 * are; it lists again if anything moved, all the same.
+	 */
+	private void moveOldRecordings()
+	{
+		Filepath from = dir;
+		Filepath to = recordings;
+		try
+		{
+			io.execute(() ->
+			{
+				int moved = RecordingsFolder.moveOld(RecordingsFolder.store(from, to), System.currentTimeMillis(),
+					name ->
+					{
+						CaptureWriter w = writer;
+						return w != null && name.equals(w.name());
+					});
+				OsmmCapturePanel p = panel;
+				if (moved > 0 && p != null)
+				{
+					SwingUtilities.invokeLater(p::refreshRecordings);
+				}
+			});
+		}
+		catch (RejectedExecutionException ignored)
+		{
+			// the plugin is stopping
 		}
 	}
 

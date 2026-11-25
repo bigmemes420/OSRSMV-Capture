@@ -5,9 +5,11 @@ and switches, projectiles, graphics, hitsplats and sounds. Old School Movie Make
 fight back.
 
 It only reads what your client already knows and writes it to your computer. It sends nothing anywhere, never clicks
-or presses keys, and shows nothing in game but a small recording indicator.
+or presses keys, and shows nothing in game but a small recording indicator and its own chat lines about recordings
+(started, noted, stopped, or why not).
 
-Recordings go to `%USERPROFILE%\.runelite\plugin-data\osmm-capture\`.
+Recordings go to `%USERPROFILE%\.runelite\plugin-data\osmm-capture\recordings\`. Ones saved by an earlier version
+(one folder up) are moved there when the plugin starts.
 
 ## Running it
 
@@ -44,7 +46,7 @@ In RuneLite's settings (the wrench), search for **OSMM**.
 | Option | Default | What it does |
 |---|---|---|
 | Show recording indicator | on | A small box in game while recording or waiting for combat. Alt-drag to move it. |
-| Anonymise player names | on | Writes each player, you included, as a code such as `Player 7F3A9C` instead of their name, in game messages too. The same player always gets the same code. |
+| Anonymise player names | on | Writes each player, you included, as a code such as `Player 7F3A9C` instead of their name, in game messages too. The same player gets the same code ([Player names](#player-names)). |
 | Start on login | off | Starts a recording when you log in or hop, not on teleports. Not again after you stop one until your next login. |
 | Start in combat | off | Starts a recording when something attacking you hits you, or you hit something. Self-damage (rock cakes, divine potions), heals and poison don't count. |
 | Stop after (seconds) out of combat | 30 | Stops a combat recording after this long without fighting; 0 never stops it. |
@@ -60,16 +62,20 @@ The file format is in [FORMAT.md](FORMAT.md).
 ## Player names
 
 **Anonymise player names** is on by default. Every player, you included, is written as a code such as
-`Player 7F3A9C` instead of their name, and names inside game messages ("You have defeated …") are replaced the same
-way. Old School Movie Maker shows the codes as the players' names.
+`Player 7F3A9C` instead of their name, and the names of players in the recording or in view are replaced the same way
+inside game messages ("You have defeated …"). Old School Movie Maker shows the codes as the players' names.
 
-- **The same player always gets the same code**, whatever the capitals or spaces in their name, across recordings
-  and restarts, so you can follow someone from one recording to the next.
-- **The codes come from a secret key** in `anonymise.key`, in the recordings folder, made the first time it's needed.
-  It never leaves your computer and isn't kept in RuneLite's settings. Don't share it: with it, a name can be matched
-  to its code. Deleting it gives everyone new codes after the next restart.
-- **What stays:** NPC names, your labels and notes as you typed them, and everyone's gear, positions and the times.
-  A recording isn't fully anonymous, so still share it with care.
+- **The same player gets the same code**, whatever the capitals or spaces in their name, across recordings and
+  restarts, so you can follow someone from one recording to the next. Two exceptions: if two names come to the same
+  code in one recording, the later one gets a longer code; and if the key file can't be read or saved, the chat says
+  so and that session's codes won't match other recordings'.
+- **The codes come from a secret key** in `anonymise.key`, made the first time it's needed. It's kept in
+  `osmm-capture\`, outside the `recordings\` folder, so sharing that folder doesn't share the key. It never leaves
+  your computer and isn't kept in RuneLite's settings. Don't share it: with it, a name can be matched to its code.
+  Deleting it gives everyone new codes after the next restart.
+- **What stays:** NPC names, your labels and notes as you typed them, a game message's name of a player who was never
+  in the recording or in view, and everyone's gear, positions and the times. A recording isn't fully anonymous, so
+  still share it with care.
 - **Turned off,** recordings hold real names. Each file's header says which (`"anonymised": true` or `false`), and
   turning it on or off takes effect from the next recording.
 

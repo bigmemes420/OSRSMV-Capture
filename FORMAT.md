@@ -1,7 +1,10 @@
 # Capture format, version 1
 
 What the OSMM Capture plugin writes. One file per recording, named
-`capture_<yyyy-MM-dd_HH-mm-ss>.jsonl`, in `%USERPROFILE%\.runelite\plugin-data\osmm-capture\`.
+`capture_<yyyy-MM-dd_HH-mm-ss>.jsonl`, in `%USERPROFILE%\.runelite\plugin-data\osmm-capture\recordings\`, with its
+notes sidecar ([below](#notes-sidecar)) beside it. The key for player codes, `anonymise.key`, is one folder up, in
+`osmm-capture\` itself, so the recordings folder can be shared without it. (Earlier versions kept the recordings in
+`osmm-capture\` too; the plugin moves them into `recordings\` when it starts, never over a file of the same name.)
 
 - UTF-8, one JSON object per line ("JSON lines"), in the order the client posted the events.
 - A key that would be `null` is left out: read a missing key as null.
@@ -110,8 +113,8 @@ written as a code: `Player ` and six upper-case hex digits, e.g. `Player 7F3A9C`
 still has `self`.
 
 - The code is the start of HMAC-SHA256 of the name, under a random 32-byte key the plugin makes the first time it's
-  needed and keeps in `anonymise.key` in the same folder as the recordings (never in RuneLite's settings). The name
-  is compared as the game compares names: tags removed, any case, and spaces, non-breaking spaces, underscores and
+  needed and keeps in `osmm-capture\anonymise.key`, outside the `recordings\` folder (never in RuneLite's
+  settings). The name is compared as the game compares names: tags removed, any case, and spaces, non-breaking spaces, underscores and
   hyphens the same.
 - So a player has the same code in every recording made with the same key: across recordings, logins and restarts.
   Deleting `anonymise.key` makes a new key the next time the plugin starts, and from then on everyone gets new codes.

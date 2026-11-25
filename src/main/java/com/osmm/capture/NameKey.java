@@ -9,7 +9,8 @@ import net.runelite.client.util.Filepath;
 /**
  * The secret key for "Anonymise player names" (see {@link PlayerNames}): 32 random bytes, made the first time it's
  * needed and kept in the plugin's folder as {@value #FILE}, so a player keeps the same code across recordings and
- * restarts. It's kept only there: not in RuneLite's config, which can sync to RuneLite's servers. Read and written off
+ * restarts. It's outside the recordings folder (RecordingsFolder), so sharing that folder doesn't share the key. It's
+ * kept only there: not in RuneLite's config, which can sync to RuneLite's servers. Read and written off
  * the client thread. Never logged.
  */
 final class NameKey

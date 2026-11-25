@@ -24,8 +24,8 @@ public interface OsmmCaptureConfig extends Config
 	}
 
 	@ConfigItem(keyName = "anonymise", name = "Anonymise player names",
-		description = "Writes each player as a code such as Player 7F3A9C instead of their name; the same player always"
-			+ " gets the same code", position = 1)
+		description = "Writes each player as a code such as Player 7F3A9C instead of their name; the same player gets the"
+			+ " same code in every recording", position = 1)
 	default boolean anonymise()
 	{
 		return true;

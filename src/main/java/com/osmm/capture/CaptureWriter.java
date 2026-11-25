@@ -62,6 +62,12 @@ final class CaptureWriter
 		}
 	}
 
+	/** The file's name (in the folder it was given). */
+	String name()
+	{
+		return name;
+	}
+
 	/** Done once the file is closed (or couldn't be written). */
 	CompletableFuture<Void> whenClosed()
 	{
@@ -100,7 +106,7 @@ final class CaptureWriter
 		{
 			stopped = true;
 			queue.clear();
-			log.warn("osmm-capture: can't write {}", name, e);
+			log.debug("osmm-capture: can't write {}", name, e);   // (the chat and the panel say so)
 			onFailure.accept(this, e);
 		}
 		finally

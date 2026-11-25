@@ -26,9 +26,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * The capture files in the plugin's folder, for the side panel: what each one is (its header, its length and its
- * notes, read by streaming the file once), and the notes sidecar (`<capture>.notes.json`) that edits its label and
- * notes without touching its records. Used off the client thread and off the EDT.
+ * The capture files in the recordings folder (see RecordingsFolder), for the side panel: what each one is (its
+ * header, its length and its notes, read by streaming the file once), and the notes sidecar (`<capture>.notes.json`)
+ * that edits its label and notes without touching its records. Used off the client thread and off the EDT.
  */
 final class CaptureFiles
 {
