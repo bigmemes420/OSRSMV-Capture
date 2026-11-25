@@ -44,6 +44,7 @@ In RuneLite's settings (the wrench), search for **OSMM**.
 | Option | Default | What it does |
 |---|---|---|
 | Show recording indicator | on | A small box in game while recording or waiting for combat. Alt-drag to move it. |
+| Anonymise player names | on | Writes each player, you included, as a code such as `Player 7F3A9C` instead of their name, in game messages too. The same player always gets the same code. |
 | Start on login | off | Starts a recording when you log in or hop, not on teleports. Not again after you stop one until your next login. |
 | Start in combat | off | Starts a recording when something attacking you hits you, or you hit something. Self-damage (rock cakes, divine potions), heals and poison don't count. |
 | Stop after (seconds) out of combat | 30 | Stops a combat recording after this long without fighting; 0 never stops it. |
@@ -54,8 +55,23 @@ In RuneLite's settings (the wrench), search for **OSMM**.
 | Sounds, Projectiles, Game messages | on | Whether each is recorded. |
 | Your stats and spec | on | Your combat stats, special energy, spec and run toggles. |
 
-Recordings hold other players' names and gear: keep them to yourself. The file format is in
-[FORMAT.md](FORMAT.md).
+The file format is in [FORMAT.md](FORMAT.md).
+
+## Player names
+
+**Anonymise player names** is on by default. Every player, you included, is written as a code such as
+`Player 7F3A9C` instead of their name, and names inside game messages ("You have defeated …") are replaced the same
+way. Old School Movie Maker shows the codes as the players' names.
+
+- **The same player always gets the same code**, whatever the capitals or spaces in their name, across recordings
+  and restarts, so you can follow someone from one recording to the next.
+- **The codes come from a secret key** in `anonymise.key`, in the recordings folder, made the first time it's needed.
+  It never leaves your computer and isn't kept in RuneLite's settings. Don't share it: with it, a name can be matched
+  to its code. Deleting it gives everyone new codes after the next restart.
+- **What stays:** NPC names, your labels and notes as you typed them, and everyone's gear, positions and the times.
+  A recording isn't fully anonymous, so still share it with care.
+- **Turned off,** recordings hold real names. Each file's header says which (`"anonymised": true` or `false`), and
+  turning it on or off takes effect from the next recording.
 
 ## Licence
 
